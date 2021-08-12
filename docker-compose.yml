@@ -1,0 +1,37 @@
+version: "3"
+services:
+  strapi:
+    image: strapi/strapi
+    container_name: backend_starter
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_NAME: strapi
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+    volumes:
+      - ./app:/srv/app
+    ports:
+      - "2337:1337"
+    depends_on:
+      - postgres
+  frontend:
+    ports:
+      - 4000:3000
+      - 49153:49153
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+
+  postgres:
+    image: postgres
+    container_name: database_starter
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+    volumes:
+      - ./data:/var/lib/postgresql/data
